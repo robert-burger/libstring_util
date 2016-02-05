@@ -1,0 +1,348 @@
+# -*- mode: Makefile -*-
+
+# for beagle bone black:
+ifeq ($(OECORE_ROOT),)
+# download from
+# http://www.angstrom-distribution.org/toolchains/angstrom-eglibc-i686-armv7a-vfp-neon-v2012.12-toolchain.gz
+OECORE_ROOT=/home/schm_fl/data/local/oecore-i686
+endif
+
+# for android:
+# for android:
+ifeq ($(ANDROID_NDK),)
+ANDROID_NDK=/root/android/ndk
+endif
+ANDROID_ABI_VER=4.7
+ANDROID_PLATFORM_VER=android-14
+
+ANDROID_INCLUDES_STLPORT := \
+	-I$(ANDROID_NDK)/sources/cxx-stl/stlport/stlport/
+
+ANDROID_LDFLAGS_STLPORT := \
+	--sysroot=$(ANDROID_NDK)/platforms/$(ANDROID_PLATFORM_VER)/arch-arm \
+	-Wl,--sysroot=$(ANDROID_NDK)/platforms/$(ANDROID_PLATFORM_VER)/arch-arm \
+	-L$(ANDROID_NDK)/sources/stlport/libs/armabi-v7a/ \
+
+
+ANDROID_INCLUDES_GNU := \
+	-I$(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/$(ANDROID_ABI_VER)/include \
+	-I$(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/$(ANDROID_ABI_VER)/libs/armeabi-v7a/include
+
+ANDROID_LDFLAGS_GNU := \
+	-L$(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/$(ANDROID_ABI_VER)/libs/armeabi-v7a/ \
+	-L$(ANDROID_NDK)/platforms/$(ANDROID_PLATFORM_VER)/arch-arm/usr/lib \
+
+
+ANDROID_INCLUDES:=\
+	--sysroot=$(ANDROID_NDK)/platforms/$(ANDROID_PLATFORM_VER)/arch-arm \
+	-I$(ANDROID_NDK)/platforms/$(ANDROID_PLATFORM_VER)/arch-arm/usr/include \
+	$(ANDROID_INCLUDES_GNU)
+
+ANDROID_LDFLAGS := \
+	-llog \
+	-Wl,--sysroot=$(ANDROID_NDK)/platforms/$(ANDROID_PLATFORM_VER)/arch-arm \
+	--sysroot=$(ANDROID_NDK)/platforms/$(ANDROID_PLATFORM_VER)/arch-arm \
+	$(ANDROID_LDFLAGS_GNU)
+
+
+ifeq ($(ARCH),)
+ifeq ($(SOURCE_DIR),)
+SOURCE_DIR := ./
+endif
+override SOURCE_DIR_ABS=
+# set ARCH and CC variables
+linux sled11-x86-gcc4.x: $(SOURCE_DEPENDENCIES)
+	@make $(OUTPUT) --no-print-directory \
+		ARCH=sled11-x86-gcc4.x \
+		CC=g++ \
+		CXX=g++ \
+		AR="ar" \
+		CXXFLAGS="-pthread -m32 -Wno-write-strings $(CXXFLAGS) $(linux-CXXFLAGS) -D__LINUX__" \
+		LDFLAGS="-pthread -m32 $(LDFLAGS) $(linux-LDFLAGS)" \
+		LIBDIRS="$(LIBDIRS) $(linux-LIBDIRS)" \
+		SOURCES_EXT="$(SOURCES_EXT)" \
+		SOURCES_EXT2="$(SOURCES_EXT2)" \
+		SOURCE_DIR="$(SOURCE_DIR)" \
+		LDLIBS="$(LDLIBS) -lrt -lstdc++"
+	@if [ -d obj/linux-intel-gcc4 ]; then rm -rf obj/linux-intel-gcc4; fi
+	@ln -fs sled11-x86-gcc4.x obj/linux-intel-gcc4
+
+PPC_FSL_BASE=/volume/USERSTORE/burger_r/toolchain/powerpc-fsl-linux
+PPC_FSL_TOOLCHAIN=$(PPC_FSL_BASE)/i686-linux/usr/bin/ppce500mc-fsl-linux
+PPC_FSL_SYSROOT=$(PPC_FSL_BASE)/p4080ds
+ppc: powerpc-fsl-linux
+powerpc-fsl-linux: $(LN_MESSAGES)  $(SOURCE_DEPENDENCIES)
+	@make $(OUTPUT) --no-print-directory \
+		ARCH=powerpc-fsl-linux \
+		CC="$(PPC_FSL_TOOLCHAIN)/powerpc-fsl-linux-g++" \
+		CXX="$(PPC_FSL_TOOLCHAIN)/powerpc-fsl-linux-g++" \
+		AR="$(PPC_FSL_TOOLCHAIN)/powerpc-fsl-linux-ar" \
+		CXXFLAGS="-pthread -Wno-write-strings $(CXXFLAGS) $(PPC_CXXFLAGS) -D__LINUX__ -D__PPC__ --sysroot $(PPC_FSL_SYSROOT)" \
+		C_ONLY_FLAGS="" \
+		LDFLAGS="$(PPC_LDFLAGS) -pthread $(LDFLAGS)" \
+		LIBDIRS="$(LIBDIRS) " \
+		SOURCES_EXT="$(SOURCES_EXT)" \
+		SOURCES_EXT2="$(SOURCES_EXT2)" \
+		SOURCE_DIR="$(SOURCE_DIR)" \
+		LDLIBS="$(LDLIBS)"
+
+android arm-linux-androideabi:  $(SOURCE_DEPENDENCIES)
+	@make $(OUTPUT) --no-print-directory \
+		ARCH=arm-linux-androideabi \
+		CC="$(ANDROID_NDK)/toolchains/arm-linux-androideabi-$(ANDROID_ABI_VER)/prebuilt/linux-x86/bin/arm-linux-androideabi-g++" \
+		CXX="$(ANDROID_NDK)/toolchains/arm-linux-androideabi-$(ANDROID_ABI_VER)/prebuilt/linux-x86/bin/arm-linux-androideabi-g++" \
+		AR="$(ANDROID_NDK)/toolchains/arm-linux-androideabi-$(ANDROID_ABI_VER)/prebuilt/linux-x86/bin/arm-linux-androideabi-ar" \
+		CXXFLAGS="-pthread -Wno-write-strings $(CXXFLAGS) $(ANDROID_INCLUDES) -D__LINUX__ -D__ANDROID__ -frtti -fexceptions" \
+		LDFLAGS="$(ANDROID_LDFLAGS) -pthread $(LDFLAGS)" \
+		LIBDIRS="$(LIBDIRS) " \
+		SOURCES_EXT="$(SOURCES_EXT)" \
+		SOURCES_EXT2="$(SOURCES_EXT2)" \
+		SOURCE_DIR="$(SOURCE_DIR)" \
+		LDLIBS="$(LDLIBS) -L$(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/4.7/libs/armeabi-v7a/ -lgnustl_static"
+
+
+beagleboneblack bbb am335x arm-angstrom-linux-gnueabi:  $(SOURCE_DEPENDENCIES)
+	@source $(OECORE_ROOT)/environment-setup-armv7a-vfp-neon-angstrom-linux-gnueabi; make $(OUTPUT) --no-print-directory \
+		ARCH=arm-angstrom-linux-gnueabi \
+		CC="$$CXX" \
+		CXX="$$CXX" \
+		AR="${AR}" \
+		CXXFLAGS="-pthread -fPIC -Wno-write-strings $(CXXFLAGS) $(linux-CXXFLAGS) -D__LINUX__ -DARM" \
+		LDFLAGS="-pthread -lrt $(LDFLAGS) $(linux-LDFLAGS) -Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed" \
+		LIBDIRS="$(LIBDIRS) $(linux-LIBDIRS)" \
+		SOURCES_EXT="$(SOURCES_EXT)" \
+		SOURCES_EXT2="$(SOURCES_EXT2)" \
+		SOURCE_DIR="$(SOURCE_DIR)" \
+		LDLIBS="$(LDLIBS)"
+
+ubuntu12.04-armhf-gcc4.x: $(LN_MESSAGES)  $(SOURCE_DEPENDENCIES)
+	@source /volume/USERSTORE/f_xrotor/Gumstix/Linux_Toolchain/environment-gcc-linaro-arm-linux-gnueabihf-4.7-2013.04; make $(OUTPUT) --no-print-directory \
+		ARCH=ubuntu12.04-armhf-gcc4.x \
+		CC="$$CXX" \
+		CXX="$$CXX" \
+		AR="${AR}" \
+		CXXFLAGS="-pthread -fPIC -Wno-write-strings $(CXXFLAGS) $(LN_CXXFLAGS) $(linux-CXXFLAGS) -D__LINUX__  -DARM" \
+		C_ONLY_FLAGS="-std=gnu99" \
+		LDFLAGS="-pthread -lutil -lrt $(LDFLAGS) $(linux-LDFLAGS) -Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed" \
+		LIBDIRS="$(LIBDIRS)  $(LN_LIBDIRS) $(linux-LIBDIRS)" \
+		LNDIR="$(LNDIR)" \
+		SOURCES_EXT="$(SOURCES_EXT)" \
+		SOURCES_EXT2="$(SOURCES_EXT2)" \
+		SOURCE_DIR="$(SOURCE_DIR)" \
+		LDLIBS="$(LDLIBS) $(LN_LDLIBS)"
+
+gumstix beagleboard arm-linux-gnueabi: $(LN_MESSAGES)  $(SOURCE_DEPENDENCIES)
+	@source /volume/USERSTORE/f_xrotor/Gumstix/Linux_Toolchain/environment-gcc-linaro-4.6-2013.03; make $(OUTPUT) --no-print-directory \
+		ARCH=arm-linux-gnueabi \
+		CC="$$CXX" \
+		CXX="$$CXX" \
+		AR="${AR}" \
+		CXXFLAGS="-pthread -fPIC -Wno-write-strings $(CXXFLAGS) $(linux-CXXFLAGS) -D__LINUX__  -DARM" \
+		C_ONLY_FLAGS="-std=gnu99" \
+		LDFLAGS="-pthread -lutil -lrt $(LDFLAGS) $(linux-LDFLAGS) -Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed" \
+		LIBDIRS="$(LIBDIRS) $(linux-LIBDIRS)" \
+		LNDIR="$(LNDIR)" \
+		SOURCES_EXT="$(SOURCES_EXT)" \
+		SOURCES_EXT2="$(SOURCES_EXT2)" \
+		SOURCE_DIR="$(SOURCE_DIR)" \
+		LDLIBS="$(LDLIBS)"
+
+linux64 sled11-x86_64-gcc4.x: $(SOURCE_DEPENDENCIES)
+	@make $(OUTPUT) --no-print-directory \
+		ARCH=sled11-x86_64-gcc4.x \
+		CC=g++ \
+		CXX=g++ \
+		AR="ar" \
+		CXXFLAGS="-pthread -O0 -g -m64 -fPIC -Wno-write-strings $(CXXFLAGS) $(linux-CXXFLAGS) -D__LINUX__" \
+		LDFLAGS="-pthread $(LDFLAGS) $(linux-LDFLAGS)" \
+		LIBDIRS="$(LIBDIRS) $(linux-LIBDIRS)" \
+		SOURCES_EXT="$(SOURCES_EXT)" \
+		SOURCES_EXT2="$(SOURCES_EXT2)" \
+		SOURCE_DIR="$(SOURCE_DIR)" \
+		LDLIBS="$(LDLIBS) -lrt -lstdc++"
+qnx qnx6.3-x86-gcc3.3 qnx-intel-gcc335: $(SOURCE_DEPENDENCIES)
+	@if [ ! -d obj/qnx6.3-x86-gcc3.3 ]; then rm -rf obj/qnx6.3-x86-gcc3.3; fi
+	@. /opt/qnx/run_qde_fixes.sh; make $(OUTPUT) --no-print-directory \
+		ARCH=qnx6.3-x86-gcc3.3 \
+		CC="/opt/qnx/host/linux/x86/usr/bin/QCC -V 3.3.5,gcc_ntox86_cpp -fmessage-length=0" \
+		CXX="/opt/qnx/host/linux/x86/usr/bin/QCC -V 3.3.5,gcc_ntox86_cpp -fmessage-length=0" \
+		AR="ar" \
+		CXXFLAGS="$(CXXFLAGS) -D__QNX__ -Wno-write-strings" \
+		LDFLAGS="$(LDFLAGS)" \
+		LIBDIRS="$(LIBDIRS)" \
+		SOURCES_EXT="$(SOURCES_EXT)" \
+		SOURCES_EXT2="$(SOURCES_EXT2)" \
+		SOURCE_DIR="$(SOURCE_DIR)" \
+		LDLIBS="$(LDLIBS) -lsocket -lcpp -lm" 
+	@if [ -d obj/qnx-intel-gcc33 ]; then rm -rf obj/qnx-intel-gcc33; fi
+	@ln -fs qnx6.3-x86-gcc3.3 obj/qnx-intel-gcc33
+	@if [ -d obj/qnx-intel-gcc335 ]; then rm -rf obj/qnx-intel-gcc335; fi
+	@ln -fs qnx6.3-x86-gcc3.3 obj/qnx-intel-gcc335
+
+qnx64-ppc qnx6.4-powerpc-gcc4.x qnx6.4-powerpc-gcc4.x-dinkum: $(LN_MESSAGES) $(SOURCE_DEPENDENCIES)
+	@. /volume/qnx/i686Linux/qcc-environment.sh qnx64 >/dev/null; make $(OUTPUT) --no-print-directory \
+		ARCH="qnx6.4-powerpc-gcc4.x" \
+		CXX="QCC -Vgcc_ntoppcbe -fmessage-length=0 -Wno-write-strings" \
+		CC="QCC -Vgcc_ntoppcbe -fmessage-length=0 -Wno-write-strings" \
+		AR="ar" \
+		CXXFLAGS="$(CXXFLAGS) -D__QNX__ -D__PPC__" \
+		LDFLAGS="$(LDFLAGS)" \
+		LIBDIRS="$(LIBDIRS)" \
+		SOURCES_EXT="$(SOURCES_EXT)" \
+		SOURCES_EXT2="$(SOURCES_EXT2)" \
+		SOURCE_DIR="$(SOURCE_DIR)" \
+		LDLIBS="$(LDLIBS) -lsocket -lcpp -lm" 
+
+qnx65 qnx6.5-x86-gcc4.x: qnx6.5-x86-gcc4.x-dinkum qnx6.5-x86-gcc4.x-gpp
+
+qnx65-dinkum qnx6.5-x86-gcc4.x-dinkum: $(SOURCE_DEPENDENCIES)
+	@. /volume/qnx/i686Linux/qcc-environment.sh qnx65 >/dev/null; make $(OUTPUT) --no-print-directory \
+		ARCH="qnx6.5-x86-gcc4.x" \
+		CXX="QCC -fmessage-length=0 -Wno-write-strings" \
+		CC="QCC -fmessage-length=0 -Wno-write-strings" \
+		AR="ar" \
+		CXXFLAGS="$(CXXFLAGS) -D__QNX__" \
+		LDFLAGS="$(LDFLAGS)" \
+		LIBDIRS="$(LIBDIRS)" \
+		LNDIR="$(LNDIR)" \
+		SOURCES_EXT="$(SOURCES_EXT)" \
+		SOURCES_EXT2="$(SOURCES_EXT2)" \
+		SOURCE_DIR="$(SOURCE_DIR)" \
+		LDLIBS="$(LDLIBS) -lsocket -lcpp -lm" 
+
+qnx65-gpp qnx6.5-x86-gcc4.x-gpp: $(SOURCE_DEPENDENCIES)
+	@. /volume/qnx/i686Linux/qcc-environment.sh qnx65 >/dev/null; make $(OUTPUT) --no-print-directory \
+		ARCH="qnx6.5-x86-gcc4.x-gpp" \
+		CXX="QCC -V 4.4.2,gcc_ntox86_gpp -fmessage-length=0 -Wno-write-strings" \
+		CC="QCC -V 4.4.2,gcc_ntox86_gpp -fmessage-length=0 -Wno-write-strings" \
+		AR="ar" \
+		CXXFLAGS="$(CXXFLAGS) -D__QNX__" \
+		LDFLAGS="$(LDFLAGS)" \
+		LIBDIRS="$(LIBDIRS)" \
+		LNDIR="$(LNDIR)" \
+		SOURCES_EXT="$(SOURCES_EXT)" \
+		SOURCES_EXT2="$(SOURCES_EXT2)" \
+		SOURCE_DIR="$(SOURCE_DIR)" \
+		LDLIBS="$(LDLIBS) -lsocket -lcpp -lm" 
+
+
+
+#	~rtosvx/WindRiver/wrenv.sh -p vxworks-6.6 make $(OUTPUT) --no-print-directory 
+vxworks6.8: vxworks6.8-x86-gcc4.x
+vxworks6.7: vxworks6.7-x86-gcc4.x
+vxworks6.9: vxworks6.9-x86-gcc4.x
+vxworks6.9.3: vxworks6.9.3-x86-gcc4.x
+vxworks6.9.4: vxworks6.9.4-x86-gcc4.x
+vxworks: vxworks6.7-x86-gcc4.x vxworks6.8-x86-gcc4.x vxworks6.9-x86-gcc4.x vxworks6.9.3-armv7-gcc4.x, vxworks6.9.4-x86-gcc4.x
+
+#	~rtosvx/WindRiver/wrenv.sh -p vxworks-6.6 make $(OUTPUT) --no-print-directory 
+vxworks6.7-x86-gcc4.x \
+vxworks6.8-x86-gcc4.x \
+vxworks6.9-x86-gcc4.x \
+vxworks6.9-armv7-gcc4.x \
+vxworks6.9.3-armv7-gcc4.x \
+vxworks6.9.4-x86-gcc4.x \
+vxworks6.9.3-x86-gcc4.x: $(SOURCE_DEPENDENCIES)
+	@make $(OUTPUT) --no-print-directory \
+		ARCH=$@ \
+		CC="/opt/vxworks/wrapper/linux/bin/$@-gcc -std=gnu99" \
+		CXX="/opt/vxworks/wrapper/linux/bin/$@-g++" \
+		AR="/opt/vxworks/wrapper/linux/bin/$@-ar" \
+		CXXFLAGS="$(CXXFLAGS) -DVXWORKS -Wno-write-strings $(vxworks-CXXFLAGS)" \
+		LDFLAGS="$(LDFLAGS)" \
+		LIBDIRS="$(LIBDIRS)" \
+		SOURCES_EXT="$(SOURCES_EXT)" \
+		SOURCES_EXT2="$(SOURCES_EXT2)" \
+		SOURCE_DIR="$(SOURCE_DIR)" \
+		LDLIBS="$(LDLIBS)" 
+
+win \
+win32 \
+mingw32 \
+win7-x86-mingw32 \
+winxp-x86-mingw32 \
+windows-intel-mingw32: $(SOURCE_DEPENDENCIES)
+	@make $(OUTPUT) --no-print-directory   \
+		ARCH=winxp-x86-mingw32 \
+		EXT=".exe" \
+		CC="/home/schm_fl/downloads/mingw32_4.2.1.dfsg-1_i386/usr/bin/i586-mingw32msvc-g++" \
+		CXX="/home/schm_fl/downloads/mingw32_4.2.1.dfsg-1_i386/usr/bin/i586-mingw32msvc-g++" \
+		AR="/home/schm_fl/downloads/mingw32_4.2.1.dfsg-1_i386/usr/bin/i586-mingw32msvc-ar" \
+		CXXFLAGS="$(CXXFLAGS) -D__WIN32__ " \
+		LDFLAGS="$(LDFLAGS)" \
+		LIBDIRS="$(LIBDIRS)" \
+		SOURCES_EXT="$(SOURCES_EXT)" \
+		SOURCES_EXT2="$(SOURCES_EXT2)" \
+		SOURCE_DIR="$(SOURCE_DIR)" \
+		LDLIBS="$(LDLIBS) -lws2_32" 
+
+
+else
+ifeq ($(SOURCE_DIR_ABS),)
+# change to output dir
+$(OUTPUT):
+	@echo "building $(OUTPUT) for $(ARCH)"
+	@-mkdir -p obj/$(ARCH)
+	@make $(MAKE_JFLAG) -f $(CURDIR)/Makefile --no-print-directory -C obj/$(ARCH) \
+		ARCH=$(ARCH) \
+		EXT=$(EXT) \
+		CC="$(CC)" \
+		CXX="$(CXX)" \
+		AR="$(AR)" \
+		CXXFLAGS="$(CXXFLAGS) '-DDLRRM_ARCH=\"$(ARCH)\"'" \
+		CFLAGS="$(CXXFLAGS) '-DDLRRM_ARCH=\"$(ARCH)\"'" \
+		LDFLAGS="$(LDFLAGS) $(addsuffix /$(ARCH),$(LIBDIRS))" \
+		SOURCES_EXT="$(SOURCES_EXT)" \
+		SOURCES_EXT2="$(SOURCES_EXT2)" \
+		SOURCE_DIR_ABS="$(addprefix $(CURDIR)/,$(SOURCE_DIR))" \
+		SUBDIRS="$(addprefix $(CURDIR)/,$(SUBDIRS))" \
+		MAKEFILE_DIR=$(CURDIR) \
+		$(OUTPUT)
+else
+# create dependency makefiles, compile and link
+VPATH := $(SOURCE_DIR_ABS)
+SOURCES_EXT=.cpp
+SOURCES_EXT2=
+
+SOURCES := $(foreach dir,$(VPATH),$(wildcard $(dir)/*$(SOURCES_EXT)))
+OBJECTS := $(notdir $(SOURCES:$(SOURCES_EXT)=.o))
+DEPENDENCIES := $(notdir $(SOURCES:$(SOURCES_EXT)=.d))
+
+ifeq ($(SOURCES_EXT2),)
+else
+SOURCES2 = $(wildcard $(SOURCE_DIR_ABS)/*$(SOURCES_EXT2))
+#SOURCES += $(SOURCES2)
+OBJECTS2 = $(notdir $(SOURCES2:$(SOURCES_EXT2)=.o))
+OBJECTS += $(OBJECTS2)
+#DEPENDENCIES += $(notdir $(SOURCES2:$(SOURCES_EXT2)=.d))
+endif
+
+ifeq ($(findstring qnx,$(ARCH)),qnx)
+CCMM=gcc
+else
+ifeq ($(findstring vxworks,$(ARCH)),vxworks)
+CCMM=gcc
+else
+CCMM=$(CXX)
+endif
+endif
+
+%.d : %$(SOURCES_EXT)
+	@set -e; rm -f $@; \
+	$(CCMM) -MM $(CXXFLAGS) $< > $@.$$$$; \
+	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$
+
+$(OUTPUT): $(OBJECTS) $(MAKEFILE_DIR)/Makefile
+ifeq ($(suffix $(OUTPUT)),.a)
+	$(AR) r $(OUTPUT) $(OBJECTS)
+else
+	$(CXX) -o $(OUTPUT)$(EXT) $(OBJECTS) $(LIBDIRS) $(LDFLAGS) $(LDLIBS)
+endif
+	$(POSTCMDS)
+
+-include $(DEPENDENCIES)
+
+endif # SOURCE_DIR
+
+endif # ARCH
