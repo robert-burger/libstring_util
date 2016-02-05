@@ -409,6 +409,12 @@ py_value* eval_full(string value, string::size_type start, string::size_type* np
 		// read value
 		//printf("try to read string from %s\n", repr(value.substr(p)).c_str());
 		np = eval_string_until(value, p, s->value);
+	} else if(((p + 1) < value.size()) && value[p] == '0' && (value[p + 1] == 'x' || value[p + 1] == 'X')) {
+		string v;
+		np = eval_string_until(value, p, v);
+		py_int* s = new py_int();
+		output = s;
+		s->value = (int)strtol(v.c_str(), (char **)NULL, 16);
 	} else if(isdigit(value[p]) || strchr("+-.", value[p])) {
 		string v;
 		np = eval_string_until(value, p, v);
