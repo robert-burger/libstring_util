@@ -1,0 +1,81 @@
+// -*- mode: c++ -*-
+
+#include <map>
+
+using namespace std;
+
+template <class Key, class Type> class orderedmap : public map<Key, Type> {
+	typedef list<Key> order_type;
+	typedef Type map_value_type;
+	typedef map<Key, map_value_type> map_type;
+	order_type order;
+public:
+
+	class iterator : map_type::iterator {
+		typename order_type::iterator li;
+		typename order_type::iterator lie;
+		map_type& m;
+	public:
+		iterator(typename map_type::iterator i, typename order_type::iterator li, map_type& m, typename order_type::iterator lie)
+			: map<Key, Type>::iterator(i), li(li), lie(lie), m(m) {};
+
+		typename map_type::iterator operator->() {
+			return *this;
+		}
+		bool operator!=(const iterator& o) const {
+			return !((*this) == o);
+		}
+		bool operator==(const iterator& o) const {
+			return &o.m == &m && o.li == li;
+		}
+		
+		iterator& operator++() {
+			li++;
+			if(li == lie)
+				return *this;
+			(*(typename map_type::iterator*)this) = m.find(*li);
+			return *this;
+		}
+	};
+	friend class iterator;
+
+	iterator begin() {
+		map_type& m = static_cast<map_type &>(*this);
+		typename map_type::iterator i = m.find(order.front());
+		return iterator(i, order.begin(), m, order.end());
+	}
+
+	iterator end() {
+		map_type& m = static_cast<map_type &>(*this);
+		return iterator(m.end(), order.end(), m, order.end());
+	}
+	iterator find(const Key& key) {
+		map_type& m = static_cast<map_type &>(*this);
+		typename map_type::iterator i = m.find(key);
+		if(i != m.end()) { // already known			
+			// find key in order
+			typename order_type::iterator k;
+			for(k = order.begin(); k != order.end(); k++) {
+				if(*k == key)
+					break;
+			}
+			return iterator(i, k, m, order.end());
+		}
+		// new item!
+		order.push_back(key);
+		typename order_type::iterator k = order.end();
+		k--;
+		i = m.insert(pair<Key, Type>(key, Type())).first;
+		return iterator(i, k, m, order.end());
+	}
+	
+	Type& operator[](const Key& key) {
+		map_type& m = static_cast<map_type &>(*this);
+		typename map_type::iterator i = m.find(key);
+		if(i != m.end()) // already known
+			return i->second;
+		// new item!
+		order.push_back(key);
+		return m[key];
+	}
+};
