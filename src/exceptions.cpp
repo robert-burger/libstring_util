@@ -17,7 +17,9 @@
     Copyright 2013 DLR e.V., Florian Schmidt, Maxime Chalon
 */
 
-#ifdef __WIN32__
+#include "config.h"
+
+#ifdef HAVE_WINDOWS_H
 #include <windows.h>
 #endif
 
@@ -34,7 +36,7 @@ errno_exception::errno_exception(const char* format, ...) {
 	vsnprintf(msg, 1024, format, ap);
 	va_end(ap);
 	string stlmsg(msg);
-#ifdef __WIN32__
+#ifdef HAVE_WINDOWS_H
 	{ 
 		LPVOID lpMsgBuf;
 		DWORD dw = GetLastError(); 

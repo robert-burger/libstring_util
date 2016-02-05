@@ -5,6 +5,8 @@ AC_PROG_CXX
 AC_PROG_RANLIB
 AM_PROG_AR
 
+AC_CHECK_HEADERS([windows.h])
+
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
  Makefile
