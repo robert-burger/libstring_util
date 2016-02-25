@@ -1,6 +1,5 @@
 autom4te.cache
-/*.in
-/src/*.in
+*.in
 /aclocal.m4
 /ar-lib
 /compile
@@ -10,3 +9,5 @@ autom4te.cache
 /missing
 .svn
 build/
+/config.guess
+/config.sub
