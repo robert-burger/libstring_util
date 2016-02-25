@@ -1,6 +1,9 @@
 AC_INIT([libstring_util], [1.0], [florian.schmidt@dlr.de])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
+RMPM_ENV
+RMPM_ARCH
+
 AC_PROG_CXX
 AC_PROG_RANLIB
 AM_PROG_AR
