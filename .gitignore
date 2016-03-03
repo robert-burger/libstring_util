@@ -1,0 +1,13 @@
+autom4te.cache
+*.in
+/aclocal.m4
+/ar-lib
+/compile
+/configure
+/depcomp
+/install-sh
+/missing
+.svn
+build/
+/config.guess
+/config.sub
