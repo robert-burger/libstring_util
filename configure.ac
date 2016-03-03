@@ -7,16 +7,16 @@ RMPM_ARCH
 AC_PROG_CXX
 AC_PROG_RANLIB
 AM_PROG_AR
-PKG_PROG_PKG_CONFIG
-PKG_INSTALLDIR
+m4_ifdef([PKG_INSTALLDIR], [PKG_PROG_PKG_CONFIG])
+m4_ifdef([PKG_INSTALLDIR], [PKG_INSTALLDIR])
 
 AC_CHECK_HEADERS([windows.h])
 
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
  Makefile
- libstring_util.pc
  src/Makefile 
  include/Makefile 
-])
+]) # libstring_util.pc
+
 AC_OUTPUT
