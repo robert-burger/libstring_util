@@ -15,8 +15,9 @@ AC_CHECK_HEADERS([windows.h])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
  Makefile
+ libstring_util.pc
  src/Makefile 
  include/Makefile 
-]) # libstring_util.pc
+])
 
 AC_OUTPUT
