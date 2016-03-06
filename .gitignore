@@ -11,3 +11,4 @@ autom4te.cache
 build/
 /config.guess
 /config.sub
+*~
