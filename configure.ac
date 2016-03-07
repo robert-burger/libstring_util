@@ -16,6 +16,7 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
  Makefile
  libstring_util.pc
+ libstring_util.pt
  src/Makefile 
  include/Makefile 
 ])
