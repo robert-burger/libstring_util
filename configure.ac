@@ -1,4 +1,4 @@
-AC_INIT([libstring_util], [1.0.3], [florian.schmidt@dlr.de])
+AC_INIT([libstring_util], [1.0.4], [florian.schmidt@dlr.de])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
 RMPM_ENV

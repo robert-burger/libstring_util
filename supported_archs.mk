@@ -1,4 +1,6 @@
-SUPPORTED_ARCHS := winxp-x86-mingw32 \
+SUPPORTED_ARCHS := \
+  winxp-x86-mingw32 \
+  winxp-x86_64-mingw32 \
   sled11-x86-gcc4.x \
   sled11-x86_64-gcc4.x \
   ubuntu12.04-armhf-gcc4.x \
