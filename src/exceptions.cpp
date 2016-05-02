@@ -17,7 +17,13 @@
     Copyright 2013 DLR e.V., Florian Schmidt, Maxime Chalon
 */
 
+#ifndef NO_CONFIG_H
 #include "config.h"
+#else
+#ifdef WIN32
+#define HAVE_WINDOWS_H
+#endif
+#endif
 
 #ifdef HAVE_WINDOWS_H
 #include <windows.h>
@@ -29,6 +35,8 @@
 #include <stdarg.h>
 
 #include <string_util/string_util.h>
+
+#include "os.h"
 
 errno_exception::errno_exception(const char* format, ...) {
 	va_list ap;

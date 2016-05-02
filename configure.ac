@@ -11,6 +11,8 @@ m4_ifdef([PKG_PROG_PKG_CONFIG], [PKG_PROG_PKG_CONFIG])
 m4_ifdef([PKG_INSTALLDIR], [PKG_INSTALLDIR], [pkgconfigdir='${libdir}/pkgconfig' AC_SUBST([pkgconfigdir])])
 
 AC_CHECK_HEADERS([windows.h])
+AC_CHECK_FUNCS([snprintf])
+
 
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([

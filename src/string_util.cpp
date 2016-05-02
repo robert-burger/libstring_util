@@ -20,10 +20,11 @@
 #include <stdio.h>
 #include <sstream>
 #include <stdarg.h>
+#include <ctype.h>
 
 #include <string_util/string_util.h>
 
-#include <ctype.h>
+#include "os.h"
 
 string binary_data_repr(const char* input, int input_len) {
 	stringstream ss;
@@ -47,7 +48,7 @@ string repr(const char* input, int input_len, bool use_dbl_quote) {
 	else
 		ss << "\"";
 	for(const char* cp = input; cp != input + input_len; cp++) {
-		if((strchr(" ,.*:;/_-+=[](){}^!?$", *cp) || isdigit(*cp) || isalpha(*cp)) && (unsigned char)*cp <= 127 && *cp) {
+		if((strchr(" ,.*:;/_-+=[](){}^!?$", *cp) || isdigit((unsigned char)*cp) || isalpha(*cp)) && (unsigned char)*cp <= 127 && *cp) {
 			//log("printable char: %d %c", *cp, *cp);
 			ss << *cp;
 			continue;
