@@ -183,7 +183,11 @@ string::size_type eval_string_until(string value, string::size_type start, strin
 		//repr(value).c_str(), delim);
 	}
 	p++;
-	while(p < value.size() - 1) {
+	while(true) {
+		if(p >= value.size()) {
+			tp = value.size() - 1;
+			break;
+		}
 		// find next backslash
 		// printf("find backslash starting from %s\n", value.substr(p).c_str());
 		string::size_type np = value.find('\\', p);
