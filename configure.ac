@@ -23,4 +23,6 @@ AC_CONFIG_FILES([
  include/Makefile 
 ])
 
+INSTALL_DATA='${INSTALL} -C -m 644'
+
 AC_OUTPUT
