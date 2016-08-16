@@ -1,8 +1,8 @@
 AC_INIT([libstring_util], [1.0.9], [florian.schmidt@dlr.de])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
-RMPM_ENV
-RMPM_ARCH
+m4_ifdef([RMPM_ENV], [RMPM_ENV])
+m4_ifdef([RMPM_ARCH], [RMPM_ARCH libdir='${exec_prefix}/lib'])
 
 AC_PROG_CXX
 AC_PROG_RANLIB
