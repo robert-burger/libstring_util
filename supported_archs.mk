@@ -15,6 +15,7 @@ SUPPORTED_ARCHS := \
   qnx6.5-x86-gcc4.x \
   qnx6.5-x86-gcc4.x-gpp \
   qnx6.4-powerpc-gcc4.x \
-  android17-armhf-gcc4.9
+  android17-armhf-gcc4.9 \
+  android17-x86-gcc4.9
 
 RMPM_DOMAIN := software
