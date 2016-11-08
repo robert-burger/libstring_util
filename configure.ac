@@ -1,4 +1,4 @@
-AC_INIT([libstring_util], [1.0.10], [florian.schmidt@dlr.de])
+AC_INIT([libstring_util], [1.0.11], [florian.schmidt@dlr.de])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
 m4_ifdef([RMPM_ENV], [RMPM_ENV])
