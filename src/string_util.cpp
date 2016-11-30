@@ -20,10 +20,11 @@
 #include <stdio.h>
 #include <sstream>
 #include <stdarg.h>
+#include <ctype.h>
 
 #include <string_util/string_util.h>
 
-#include <ctype.h>
+#include "os.h"
 
 string binary_data_repr(const char* input, int input_len) {
 	stringstream ss;
@@ -47,7 +48,7 @@ string repr(const char* input, int input_len, bool use_dbl_quote) {
 	else
 		ss << "\"";
 	for(const char* cp = input; cp != input + input_len; cp++) {
-		if((strchr(" ,.*:;/_-+=[](){}^!?$", *cp) || isdigit(*cp) || isalpha(*cp)) && (unsigned char)*cp <= 127 && *cp) {
+		if((strchr(" ,.*:;/_-+=[](){}^!?$", *cp) || isdigit((unsigned char)*cp) || isalpha((unsigned char)*cp)) && (unsigned char)*cp <= 127 && *cp) {
 			//log("printable char: %d %c", *cp, *cp);
 			ss << *cp;
 			continue;
@@ -183,7 +184,11 @@ string::size_type eval_string_until(string value, string::size_type start, strin
 		//repr(value).c_str(), delim);
 	}
 	p++;
-	while(p < value.size() - 1) {
+	while(true) {
+		if(p >= value.size()) {
+			tp = value.size() - 1;
+			break;
+		}
 		// find next backslash
 		// printf("find backslash starting from %s\n", value.substr(p).c_str());
 		string::size_type np = value.find('\\', p);
@@ -415,7 +420,7 @@ py_value* eval_full(string value, string::size_type start, string::size_type* np
 		py_int* s = new py_int();
 		output = s;
 		s->value = (int)strtol(v.c_str(), (char **)NULL, 16);
-	} else if(isdigit(value[p]) || strchr("+-.", value[p])) {
+	} else if(isdigit((unsigned char)value[p]) || strchr("+-.", value[p])) {
 		string v;
 		np = eval_string_until(value, p, v);
 		if(v.find(".") != string::npos) {
