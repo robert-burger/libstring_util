@@ -112,7 +112,7 @@ string repr(double input) {
 	return rstrip(format_string("%.16f", input), "0");
 }
 string repr(float input) {
-	return rstrip(format_string("%.7f", input), "0");
+	return rstrip(format_string("%.16f", input), "0");
 }
 string repr(uint32_t input) {
 	return format_string("%u", input);
