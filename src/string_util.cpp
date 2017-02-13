@@ -24,6 +24,8 @@
 
 #include <string_util/string_util.h>
 
+namespace string_util {
+
 #include "os.h"
 
 using namespace std;
@@ -700,4 +702,6 @@ bool pattern_matches(string pattern, string test) {
 	}
 	// printf("both pos at end! match!\n");
 	return true;
+}
+
 }

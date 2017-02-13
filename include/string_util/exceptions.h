@@ -25,6 +25,8 @@
 #include <exception>
 #include <string>
 
+namespace string_util {
+
 class errno_exception : public std::exception {
   char msg[512];
   
@@ -49,6 +51,8 @@ class str_exception : public std::exception {
 
 #define retval_exception_tb(retval, format, ...) errno_exception(retval, "%s:%d %s()\n   " format, __FILE__, __LINE__, __func__, ##__VA_ARGS__);
 #define retval_exception(retval, format, ...) errno_exception(retval, format, ##__VA_ARGS__);
+
+}
 
 #endif // STRING_UTIL_EXCEPTIONS_H
 

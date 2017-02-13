@@ -17,8 +17,12 @@
 
     Copyright 2013 DLR e.V., Florian Schmidt, Maxime Chalon
 */
+#ifndef STRING_UTIL_ORDEREDMAP
+#define STRING_UTIL_ORDEREDMAP
 
 #include <map>
+
+namespace string_util {
 
 template <class Key, class Type> class orderedmap : public std::map<Key, Type> {
 	typedef std::list<Key> order_type;
@@ -95,3 +99,8 @@ public:
 		return m[key];
 	}
 };
+
+}
+
+#endif // STRING_UTIL_ORDEREDMAP
+

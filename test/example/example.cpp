@@ -3,6 +3,8 @@
 
 #include <string_util/string_util.h>
 
+using namespace string_util;
+
 /*
   expected output:
   N list items: 3

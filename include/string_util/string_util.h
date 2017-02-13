@@ -26,10 +26,11 @@
 #include <sstream>
 #include <iomanip>
 #include <stdlib.h>
-
 #include <stdint.h>
 
 #include "exceptions.h"
+
+namespace string_util {
 
 #define str_from_define(s) #s
 
@@ -59,7 +60,7 @@ public:
 	virtual ~py_value() { };
 
 	virtual operator std::string() const { return "<py_value>"; };
-	virtual std::string repr() { return ::repr(std::string(*this)); };
+	virtual std::string repr() { return string_util::repr(std::string(*this)); };
 
 	virtual operator bool() { return false; }
 	virtual operator int() { return 0; }
@@ -192,7 +193,7 @@ public:
 		for(py_list_value_t::const_iterator i = value.begin(); i != value.end(); i++) {
 			if(i != value.begin())
 				ss << ", ";
-			ss << ::repr(*i);
+			ss << string_util::repr(*i);
 		}
 		ss << "]";
 		return ss.str();
@@ -218,7 +219,7 @@ public:
 		for(py_list_value_t::const_iterator i = value.begin(); i != value.end(); i++) {
 			if(i != value.begin())
 				ss << ", ";
-			ss << ::repr(*i);
+			ss << string_util::repr(*i);
 		}
 		ss << ")";
 		return ss.str();
@@ -249,7 +250,7 @@ public:
 		for(py_dict_value_t::const_iterator i = value.begin(); i != value.end(); i++) {
 			if(i != value.begin())
 				ss << ", ";
-			ss << ::repr(i->first) << ":" << ::repr(i->second);
+			ss << string_util::repr(i->first) << ":" << string_util::repr(i->second);
 		}
 		ss << "}";
 		return ss.str();
@@ -288,5 +289,5 @@ std::string join_string(std::vector<std::string> input, std::string by, unsigned
 
 bool pattern_matches(std::string pattern, std::string test);
 
-
+}
 #endif // STRING_UTIL_H

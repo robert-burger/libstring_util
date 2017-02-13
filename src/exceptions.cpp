@@ -36,6 +36,8 @@
 
 #include <string_util/string_util.h>
 
+namespace string_util {
+
 #include "os.h"
 
 using namespace std;
@@ -93,4 +95,6 @@ str_exception::str_exception(const char* format, ...) {
 	va_start(ap, format);
 	vsnprintf(msg, 1024, format, ap);
 	va_end(ap);
+}
+
 }
