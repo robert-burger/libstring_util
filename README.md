@@ -1,11 +1,11 @@
 # contents
 
 * simple string operations:
-** string_replace(heystack, needle, repl) -> string
-** [{r,l}]strip(input, white="\r\n\t ") -> string
-** format_string(printf_format, args...) -> string
-** split_string(input, by, max=0) -> vector<string>
-** join_string(vector<string> input, string by) -> string
+ * string_replace(heystack, needle, repl) -> string
+ * [{r,l}]strip(input, white="\r\n\t ") -> string
+ * format_string(printf_format, args...) -> string
+ * split_string(input, by, max=0) -> vector<string>
+ * join_string(vector<string> input, string by) -> string
 
 * (de-)serialization to python source
 ```C++
