@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# exec cmp $srcdir/expected_output example.log
+exec diff -Nur $srcdir/expected_output example.log

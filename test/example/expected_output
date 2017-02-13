@@ -1,0 +1,6 @@
+N list items: 3
+int: 123
+float: 123.456000
+string: 'string'
+python repr: [123, 123.456, 'string']
+PASS example (exit status: 0)

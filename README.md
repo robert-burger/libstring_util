@@ -61,7 +61,12 @@ libstring_util library:
     $ make -j4
 	
 on success the generated libraries can be found at `build/src/.libs/`
-	
+
+## run test cases
+
+    $ make check
+
+
 ## install
 if you want to install the generated libraries to your system (to the
 above specified `--prefix`) you can use the `install` target:
