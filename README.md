@@ -24,7 +24,7 @@ on debian:
 
 to create the buildsystem go into this directory and execute:
 
-	$ autoreconf -if
+    $ autoreconf -if
 
 this will generate a configure-file.
 
@@ -34,8 +34,8 @@ and execute configure with your desired flags (try `--help` to see a
 list of possible options):
 
     $ mkdir build
-	$ cd build
-	$ ../configure --prefix=/usr/local
+    $ cd build
+    $ ../configure --prefix=/usr/local
 
 ## start build
 after configure successfully finished, you can call make to build the
