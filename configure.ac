@@ -20,7 +20,8 @@ AC_CONFIG_FILES([
  libstring_util.pc
  libstring_util.pt
  src/Makefile 
- include/Makefile 
+ include/Makefile
+ test/example/Makefile
 ])
 
 INSTALL_DATA='${INSTALL} -C -m 644'
