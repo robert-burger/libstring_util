@@ -1,5 +1,4 @@
-/*
-  -*- mode: c++ -*-
+/*  -*- mode: c++ -*-
   
     This file is part of links and nodes.
 
@@ -21,12 +20,10 @@
 
 #include <map>
 
-using namespace std;
-
-template <class Key, class Type> class orderedmap : public map<Key, Type> {
-	typedef list<Key> order_type;
+template <class Key, class Type> class orderedmap : public std::map<Key, Type> {
+	typedef std::list<Key> order_type;
 	typedef Type map_value_type;
-	typedef map<Key, map_value_type> map_type;
+	typedef std::map<Key, map_value_type> map_type;
 	order_type order;
 public:
 
@@ -36,7 +33,7 @@ public:
 		map_type& m;
 	public:
 		iterator(typename map_type::iterator i, typename order_type::iterator li, map_type& m, typename order_type::iterator lie)
-			: map<Key, Type>::iterator(i), li(li), lie(lie), m(m) {};
+			: std::map<Key, Type>::iterator(i), li(li), lie(lie), m(m) {};
 
 		typename map_type::iterator operator->() {
 			return *this;
@@ -84,7 +81,7 @@ public:
 		order.push_back(key);
 		typename order_type::iterator k = order.end();
 		k--;
-		i = m.insert(pair<Key, Type>(key, Type())).first;
+		i = m.insert(std::pair<Key, Type>(key, Type())).first;
 		return iterator(i, k, m, order.end());
 	}
 	

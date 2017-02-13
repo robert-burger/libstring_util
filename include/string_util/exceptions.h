@@ -25,8 +25,6 @@
 #include <exception>
 #include <string>
 
-using namespace std;
-
 class errno_exception : public std::exception {
   char msg[512];
   
@@ -37,7 +35,7 @@ class errno_exception : public std::exception {
   virtual const char* what() const throw() { return msg; }
 };
 
-class str_exception : public exception {
+class str_exception : public std::exception {
   char msg[1024];
   
  public:

@@ -38,6 +38,8 @@
 
 #include "os.h"
 
+using namespace std;
+
 errno_exception::errno_exception(const char* format, ...) {
 	va_list ap;
 	va_start(ap, format);

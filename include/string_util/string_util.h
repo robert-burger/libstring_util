@@ -31,37 +31,35 @@
 
 #include "exceptions.h"
 
-using namespace std;
-
 #define str_from_define(s) #s
 
-typedef map<string, string> dict;
+typedef std::map<std::string, std::string> dict;
 
 class py_value;
 
-string binary_data_repr(const char* input, int input_len);
-string binary_data_repr(const string& input);
+std::string binary_data_repr(const char* input, int input_len);
+std::string binary_data_repr(const std::string& input);
 
-string repr(const char* input, int input_len, bool use_dbl_quote=false);
-string repr(const char* input, bool use_dbl_quote=false);
-string repr(string input, bool use_dbl_quote=false);
-string repr(py_value* input, bool use_dbl_quote=false);
-string repr(py_value& input);
+std::string repr(const char* input, int input_len, bool use_dbl_quote=false);
+std::string repr(const char* input, bool use_dbl_quote=false);
+std::string repr(std::string input, bool use_dbl_quote=false);
+std::string repr(py_value* input, bool use_dbl_quote=false);
+std::string repr(py_value& input);
 
-string repr(double input);
-string repr(float input);
-string repr(uint32_t input);
-string repr(int32_t input);
-string repr(uint64_t input);
-string repr(int64_t input);
-string repr(bool input);
+std::string repr(double input);
+std::string repr(float input);
+std::string repr(uint32_t input);
+std::string repr(int32_t input);
+std::string repr(uint64_t input);
+std::string repr(int64_t input);
+std::string repr(bool input);
 
 class py_value {
 public:
 	virtual ~py_value() { };
 
-	virtual operator string() const { return "<py_value>"; };
-	virtual string repr() { return ::repr(string(*this)); };
+	virtual operator std::string() const { return "<py_value>"; };
+	virtual std::string repr() { return ::repr(std::string(*this)); };
 
 	virtual operator bool() { return false; }
 	virtual operator int() { return 0; }
@@ -69,24 +67,24 @@ public:
 	virtual operator float() { return 0.0; }
 	virtual operator double() { return 0.0; }
 
-	virtual string type_name() { return "py_value"; }
+	virtual std::string type_name() { return "py_value"; }
 	virtual py_value* copy() { return new py_value(); }
 };
 
 class py_string : public py_value {  
 public:
-	string value;
+	std::string value;
 
 	py_string() {};
-	py_string(string v) : value(v) {};
-	py_string(char* v, int len) { value = string(v, len); };
+	py_string(std::string v) : value(v) {};
+	py_string(char* v, int len) { value = std::string(v, len); };
 	py_string(const py_string& a) { value = a.value; }
 	virtual ~py_string() {};
 
 	virtual operator bool() { return bool(value.size()); }
-	virtual operator string() const { return value; }
+	virtual operator std::string() const { return value; }
 	virtual operator int() { return atoi(value.c_str()); };
-	virtual string type_name() { return "py_string"; }
+	virtual std::string type_name() { return "py_string"; }
 
 	virtual py_value* copy() { return new py_string(value); }
 };
@@ -99,18 +97,18 @@ public:
 	py_int(int v) : value(v) {};
 	virtual ~py_int() {};
 
-	virtual operator string() const {
-		stringstream ss;
+	virtual operator std::string() const {
+		std::stringstream ss;
 		ss << value;
 		return ss.str();
 	}
-	virtual string repr() { return string(*this); };
+	virtual std::string repr() { return std::string(*this); };
 	virtual operator bool() { return bool(value); }
 	virtual operator int() { return value; };
 	virtual operator float() { return float(value); }
 	virtual operator double() { return double(value); }
 	virtual operator unsigned int() { return value; }
-	virtual string type_name() { return "py_int"; }
+	virtual std::string type_name() { return "py_int"; }
 
 	virtual py_value* copy() { return new py_int(value); }
 };
@@ -124,19 +122,19 @@ public:
 	py_long(py_long_value_t v) : value(v) {};
 	virtual ~py_long() {};
 
-	virtual operator string() const {
-		stringstream ss;
+	virtual operator std::string() const {
+		std::stringstream ss;
 		ss << value << "L";
 		return ss.str();
 	}
-	virtual string repr() { return string(*this); };
+	virtual std::string repr() { return std::string(*this); };
 	virtual operator bool() { return bool(value); }
 	virtual operator int() { return (int)value; };
 	virtual operator py_long_value_t() { return value; };
 	virtual operator float() { return float(value); }
 	virtual operator double() { return double(value); }
 	virtual operator unsigned int() { return (unsigned int)value; }
-	virtual string type_name() { return "py_long"; }
+	virtual std::string type_name() { return "py_long"; }
 
 	virtual py_value* copy() { return new py_long(value); }
 };
@@ -149,36 +147,36 @@ public:
 	py_float(double v) : value(v) {};
 	virtual ~py_float() {};
 
-	virtual operator string() const {
-		stringstream ss;
+	virtual operator std::string() const {
+		std::stringstream ss;
 		ss << std::setprecision(15) << value;
 		return ss.str();
 	}
-	virtual string repr() { return string(*this); };
+	virtual std::string repr() { return std::string(*this); };
 	virtual operator float() { return (float)value; };
 	virtual operator double() { return value; };
-	virtual string type_name() { return "py_float"; }
+	virtual std::string type_name() { return "py_float"; }
 
 	virtual py_value* copy() { return new py_float(value); }
 };
 
 class py_special : public py_value {
 public:
-	string value;
+	std::string value;
 
 	py_special() : value("None") {};
-	py_special(string v) : value(v) {};
+	py_special(std::string v) : value(v) {};
 	virtual ~py_special() {};
 
 	virtual operator bool() { return value == "True" || value == "true"; }
-	virtual operator string() const { return value; }
-	virtual string repr() { return string(*this); };
-	virtual string type_name() { return "py_special"; }
+	virtual operator std::string() const { return value; }
+	virtual std::string repr() { return std::string(*this); };
+	virtual std::string type_name() { return "py_special"; }
 
 	virtual py_value* copy() { return new py_special(value); }
 };
 
-typedef list<py_value*> py_list_value_t;
+typedef std::list<py_value*> py_list_value_t;
 class py_list : public py_value {  
 public:
 	py_list_value_t value;
@@ -188,8 +186,8 @@ public:
 			delete *i;
 	}
 
-	virtual operator string() const {
-		stringstream ss;
+	virtual operator std::string() const {
+		std::stringstream ss;
 		ss << "[";
 		for(py_list_value_t::const_iterator i = value.begin(); i != value.end(); i++) {
 			if(i != value.begin())
@@ -199,8 +197,8 @@ public:
 		ss << "]";
 		return ss.str();
 	}
-	virtual string repr() { return string(*this); };
-	virtual string type_name() { return "py_list"; }
+	virtual std::string repr() { return std::string(*this); };
+	virtual std::string type_name() { return "py_list"; }
 
 	virtual py_value* copy() { 
 		py_list* pyl = new py_list(); 
@@ -214,8 +212,8 @@ public:
 class py_tuple : public py_list {  
 public:
 
-	virtual operator string() const {
-		stringstream ss;
+	virtual operator std::string() const {
+		std::stringstream ss;
 		ss << "(";
 		for(py_list_value_t::const_iterator i = value.begin(); i != value.end(); i++) {
 			if(i != value.begin())
@@ -225,12 +223,12 @@ public:
 		ss << ")";
 		return ss.str();
 	}
-	virtual string repr() { return string(*this); };
-	virtual string type_name() { return "py_tuple"; }
+	virtual std::string repr() { return std::string(*this); };
+	virtual std::string type_name() { return "py_tuple"; }
 };
 
 
-typedef map<string, py_value*> py_dict_value_t;
+typedef std::map<std::string, py_value*> py_dict_value_t;
 class py_dict : public py_value {  
 public:
 	py_dict_value_t value;
@@ -242,11 +240,11 @@ public:
 			delete i->second;
 	}
 
-	py_value*& operator [](const string& v) {
+	py_value*& operator [](const std::string& v) {
 		return value[v];
 	}
-	virtual operator string() const {
-		stringstream ss;
+	virtual operator std::string() const {
+		std::stringstream ss;
 		ss << "{";
 		for(py_dict_value_t::const_iterator i = value.begin(); i != value.end(); i++) {
 			if(i != value.begin())
@@ -256,8 +254,8 @@ public:
 		ss << "}";
 		return ss.str();
 	}
-	virtual string repr() { return string(*this); };
-	virtual string type_name() { return "py_dict"; }
+	virtual std::string repr() { return std::string(*this); };
+	virtual std::string type_name() { return "py_dict"; }
 
 	virtual py_value* copy() { 
 		py_dict* pyd = new py_dict(); 
@@ -267,28 +265,28 @@ public:
 	}
 };
 
-string eval(string value);
-string::size_type eval_string_until(string value, string::size_type start, string& output);
-dict eval_dict(string value);
-list<string> eval_list(string value);
-py_value* eval_full(string value, string::size_type start=0, string::size_type* np_out=NULL);
+std::string eval(std::string value);
+std::string::size_type eval_string_until(std::string value, std::string::size_type start, std::string& output);
+dict eval_dict(std::string value);
+std::list<std::string> eval_list(std::string value);
+py_value* eval_full(std::string value, std::string::size_type start=0, std::string::size_type* np_out=NULL);
 
-unsigned int hex2dec(string hex);
+unsigned int hex2dec(std::string hex);
 
-string string_replace(string data, string search, string replace);
-string strip(string input, string white="\r\n\t ");
-string rstrip(string input, string white="\r\n\t ");
-string lstrip(string input, string white="\r\n\t ");
-string format_string(const char* format, ...);
+std::string string_replace(std::string data, std::string search, std::string replace);
+std::string strip(std::string input, std::string white="\r\n\t ");
+std::string rstrip(std::string input, std::string white="\r\n\t ");
+std::string lstrip(std::string input, std::string white="\r\n\t ");
+std::string format_string(const char* format, ...);
 
-list<string> split_command_line(string cmdline);
-string join_command_line(list<string>& args);
+std::list<std::string> split_command_line(std::string cmdline);
+std::string join_command_line(std::list<std::string>& args);
 
-vector<string> split_string(string input, string by, unsigned int max_split=0);
-string join_string(vector<string> input, string by);
-string join_string(vector<string> input, string by, unsigned int from, unsigned int to_without);
+std::vector<std::string> split_string(std::string input, std::string by, unsigned int max_split=0);
+std::string join_string(std::vector<std::string> input, std::string by);
+std::string join_string(std::vector<std::string> input, std::string by, unsigned int from, unsigned int to_without);
 
-bool pattern_matches(string pattern, string test);
+bool pattern_matches(std::string pattern, std::string test);
 
 
 #endif // STRING_UTIL_H

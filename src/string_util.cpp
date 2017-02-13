@@ -26,6 +26,8 @@
 
 #include "os.h"
 
+using namespace std;
+
 string binary_data_repr(const char* input, int input_len) {
 	stringstream ss;
 	ss << "data ";
