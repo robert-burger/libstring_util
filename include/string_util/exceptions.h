@@ -46,13 +46,13 @@ class str_exception : public std::exception {
   virtual const char* what() const throw() { return msg; }
 };
 
-#define str_exception_tb(format, ...) str_exception("%s:%d %s()\n   " format, __FILE__, __LINE__, __func__, ##__VA_ARGS__);
-#define errno_exception_tb(format, ...) errno_exception("%s:%d %s()\n   " format, __FILE__, __LINE__, __func__, ##__VA_ARGS__);
-
-#define retval_exception_tb(retval, format, ...) errno_exception(retval, "%s:%d %s()\n   " format, __FILE__, __LINE__, __func__, ##__VA_ARGS__);
-#define retval_exception(retval, format, ...) errno_exception(retval, format, ##__VA_ARGS__);
-
 }
+
+#define str_exception_tb(format, ...) string_util::str_exception("%s:%d %s()\n   " format, __FILE__, __LINE__, __func__, ##__VA_ARGS__);
+#define errno_exception_tb(format, ...) string_util::errno_exception("%s:%d %s()\n   " format, __FILE__, __LINE__, __func__, ##__VA_ARGS__);
+
+#define retval_exception_tb(retval, format, ...) string_util::errno_exception(retval, "%s:%d %s()\n   " format, __FILE__, __LINE__, __func__, ##__VA_ARGS__);
+#define retval_exception(retval, format, ...) string_util::errno_exception(retval, format, ##__VA_ARGS__);
 
 #endif // STRING_UTIL_EXCEPTIONS_H
 
