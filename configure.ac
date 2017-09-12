@@ -1,4 +1,4 @@
-AC_INIT([libstring_util], [1.1.4], [florian.schmidt@dlr.de])
+AC_INIT([libstring_util], [1.1.5], [florian.schmidt@dlr.de])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign silent-rules])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
