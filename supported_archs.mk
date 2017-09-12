@@ -11,7 +11,7 @@ SUPPORTED_ARCHS := \
   vxworks6.9.3-x86-gcc4.x \
   vxworks6.9.3-armv7-gcc4.x \
   vxworks6.9.4-x86-gcc4.x \
-  vxworks7.0.0-x86_64-gcc4.x \
+  vxworks7.0.0-x86_64 \
   qnx6.3-x86-gcc3.3 \
   qnx6.5-x86-gcc4.x \
   qnx6.5-x86-gcc4.x-gpp \
