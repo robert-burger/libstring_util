@@ -278,7 +278,17 @@ std::string string_replace(std::string data, std::string search, std::string rep
 std::string strip(std::string input, std::string white="\r\n\t ");
 std::string rstrip(std::string input, std::string white="\r\n\t ");
 std::string lstrip(std::string input, std::string white="\r\n\t ");
-std::string format_string(const char* format, ...);
+std::string format_string(const char* format, ...); // please use formatter objects!
+
+class string_formatter {
+	char* buffer;
+	unsigned int size;
+public:
+	string_formatter();
+	~string_formatter();
+
+	std::string operator()(const char* format, ...);
+};
 
 std::list<std::string> split_command_line(std::string cmdline);
 std::string join_command_line(std::list<std::string>& args);

@@ -492,22 +492,64 @@ string rstrip(string input, string white) {
 	return input.substr(0, end + 1);
 }
 
-static char* format_string_buffer = NULL;
-void remove_format_string_buffer(void) {
-	free(format_string_buffer);
-}
 string format_string(const char* format, ...) {
-	/* Guess we need no more than 100 bytes. */
 	int n;
-	static int size = 0;
-	static char*& p = format_string_buffer;
+	int size = 0;
+	char* p = NULL;
 	char* np;
 
 	if(!p) {
 		size = 255;
 		if ((p = (char*)malloc(size)) == NULL)
 			throw std::bad_alloc();
-		atexit(remove_format_string_buffer);
+	}
+	va_list ap;
+	// va_start(ap, format); // caused segfault with gcc 4.8.2 on x86_64 when vsnprintf needs to be called multiple times
+	
+	while(true) {
+		/* Try to print in the allocated space. */
+		va_start(ap, format); // needed for gcc 4.8.2 on x86_64
+		n = vsnprintf(p, size, format, ap);
+		va_end(ap);
+		/* If that worked, return the string. */
+		if (n > -1 && n < size)
+			break;
+		/* Else try again with more space. */
+		if (n > -1)    /* glibc 2.1 */
+			size = n+1; /* precisely what is needed */
+		else           /* glibc 2.0 */
+			size *= 2;  /* twice the old size */
+		if ((np = (char*)realloc(p, size)) == NULL) {
+			free(p);
+			throw std::bad_alloc();
+		}
+		p = np;
+	}
+
+	// va_end(ap);
+	string ret(p);
+	free(p);
+	return ret;
+}
+
+string_formatter::string_formatter() {
+	buffer = NULL;
+	size = 0;
+}
+string_formatter::~string_formatter() {
+	free(buffer);
+}
+string string_formatter::operator()(const char* format, ...) {
+	int n;
+	char*& p = buffer;
+	char* np;
+
+	if(!p) {
+		size = strlen(format);
+		if(size < 256)
+			size = 256;
+		if ((p = (char*)malloc(size)) == NULL)
+			throw std::bad_alloc();
 	}
 	va_list ap;
 	// va_start(ap, format); // caused segfault with gcc 4.8.2 on x86_64 when vsnprintf needs to be called multiple times
