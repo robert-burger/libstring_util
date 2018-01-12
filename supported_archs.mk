@@ -5,6 +5,7 @@ SUPPORTED_ARCHS := \
   sled11-x86-gcc4.x \
   sled11-x86_64-gcc4.x \
   ubuntu12.04-armhf-gcc4.x \
+  ubuntu14.04-armhf-gcc4.x \
   vxworks6.7-x86-gcc4.x \
   vxworks6.8-x86-gcc4.x \
   vxworks6.9-x86-gcc4.x \
