@@ -427,7 +427,7 @@ py_value* eval_full(string value, string::size_type start, string::size_type* np
 	} else if(isdigit((unsigned char)value[p]) || strchr("+-.", value[p])) {
 		string v;
 		np = eval_string_until(value, p, v);
-		if(v.find(".") != string::npos) {
+		if(v.find(".") != string::npos || v.find("e") != string::npos || v.find("E") != string::npos) {
 			py_float* s = new py_float();
 			output = s;
 			s->value = atof(v.c_str());
