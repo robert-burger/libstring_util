@@ -697,6 +697,7 @@ bool pattern_matches(string pattern, string test) {
 		}
 
 		p = pattern[p_pos];
+		// printf("pattern char: %c\n", p);
 		if(p_pos == (pattern.size() - 1) && p == '*') {
 			// printf("pattern has trailing *, match!\n");
 			return true;
@@ -718,17 +719,21 @@ bool pattern_matches(string pattern, string test) {
 		}
 
 		t = test[t_pos];
+		// printf("text char: %c\n", t);
 
 		if(p == '*') {
 			char np = pattern[p_pos + 1];
+			// printf("next pattern char: %c\n", np);
 			if(np == t) {
 				// printf("ungreedy will match at text %c\n", t);
 				ungreedy = t_pos;
+				p_pos += 2; // to allow patterns like "*.cd" for "ab.cd"
 				t_pos ++;
 				continue;
 			}
 			// maybe there is (another) later match!
 			t_pos++;
+			// printf("next text pos!\n");
 			continue;
 		} else if(p == '?') {
 			p_pos ++;
