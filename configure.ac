@@ -1,4 +1,8 @@
-AC_INIT([libstring_util], [1.1.6], [florian.schmidt@dlr.de])
+AC_INIT(
+    [libstring_util],
+    m4_esyscmd_s([cat project.properties | grep VERSION    | cut -d'=' -f2 | xargs printf "%s"]),
+    m4_esyscmd_s([cat project.properties | grep MAINTAINER | cut -d'=' -f2 | xargs printf "%s"]))
+
 AM_INIT_AUTOMAKE([-Wall -Werror foreign silent-rules])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 

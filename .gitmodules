@@ -1,4 +1,0 @@
-[submodule "scripts"]
-	path = scripts
-	url = https://rmc-github.robotic.dlr.de/robotkernel/scripts.git
-	#url = git@rmc-github.robotic.dlr.de:robotkernel/scripts.git
