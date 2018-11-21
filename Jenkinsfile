@@ -1,9 +1,6 @@
 @Library('rmc-jenkins-libraries') _
 
-String profiles = rmcBuild.findProfiles()
-println("Building for: $profiles")
-
-def parallelCtx = rmcBuild.parallelContext(profiles)
+def parallelCtx = rmcBuild.parallelContext()
 parallelCtx.checkout()
 parallelCtx.generateContext { -> conan.init() }
 

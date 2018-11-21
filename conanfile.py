@@ -1,10 +1,10 @@
 from conans import ConanFile, AutoToolsBuildEnvironment
 
 
-class StringutilConan(ConanFile):
+class StringUtilConan(ConanFile):
     name = "libstring_util"
     license = "GPLv3"
-    url = "https://rmc-github.robotic.dlr.de/schm-fl/libstring_util"
+    url = f"https://rmc-github.robotic.dlr.de/common/{name}}"
     description = "simple string operations"
     settings = "os", "compiler", "build_type", "arch"
     options = {"fPIC": [True, False]}
