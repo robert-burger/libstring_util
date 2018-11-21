@@ -4,7 +4,7 @@ from conans import ConanFile, AutoToolsBuildEnvironment
 class StringUtilConan(ConanFile):
     name = "libstring_util"
     license = "GPLv3"
-    url = f"https://rmc-github.robotic.dlr.de/common/{name}}"
+    url = f"https://rmc-github.robotic.dlr.de/common/{name}"
     description = "simple string operations"
     settings = "os", "compiler", "build_type", "arch"
     options = {"fPIC": [True, False]}
