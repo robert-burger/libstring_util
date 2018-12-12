@@ -7,8 +7,8 @@ class StringUtilConan(ConanFile):
     url = f"https://rmc-github.robotic.dlr.de/common/{name}"
     description = "simple string operations"
     settings = "os", "compiler", "build_type", "arch"
-    options = {"fPIC": [True, False]}
-    default_options = "fPIC=True"
+    options = {"shared": [True, False], "fPIC": [True, False]}
+    default_options = {"shared": False, "fPIC": True}
     scm = {
         "type": "git",
         "url": "auto",
@@ -20,7 +20,18 @@ class StringUtilConan(ConanFile):
         self.run("autoreconf -if")
         autotools = AutoToolsBuildEnvironment(self)
         autotools.fpic = self.options.fPIC
-        autotools.configure(configure_dir=".", vars={'CFLAGS': ''})
+
+        if self.settings.build_type == "Debug":
+            autotools.flags = ["-O0", "-g"]
+        else:
+            autotools.flags = ["-O3"]
+
+        if self.options.shared:
+            args = ["--enable-shared", "--disable-static"]
+        else:
+            args = ["--disable-shared", "--enable-static"]
+
+        autotools.configure(configure_dir=".", vars={'CFLAGS': ''}, args=args)
         autotools.make()
 
     def package(self):
