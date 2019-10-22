@@ -1,0 +1,8 @@
+---
+- type: DLR SE QM project file
+- seqm_version: 1.1
+- project_name: libstring_util
+- seqmedit_version: 0.12.1
+- howto: 'wanna create such a cool file? see https://wiki.robotic.dlr.de/Cissy#seqm.yaml (at RM) or https://gitlab-ee.sc.dlr.de/se-netzwerk/seqmedit (outside of RM, but inside of DLR)'
+- recommendations: ~
+- application_class: 3
