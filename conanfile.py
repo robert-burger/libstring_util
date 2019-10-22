@@ -1,4 +1,4 @@
-from conans import ConanFile, AutoToolsBuildEnvironment
+from conans import ConanFile, AutoToolsBuildEnvironment, tools
 
 
 class StringUtilConan(ConanFile):
@@ -9,12 +9,7 @@ class StringUtilConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = {"shared": False, "fPIC": True}
-    scm = {
-        "type": "git",
-        "url": "auto",
-        "revision": "auto",
-        "submodule": "recursive",
-    }
+    exports_sources = ["*", "!.gitignore"] + ["!%s" % x for x in tools.Git().excluded_files()]
 
     def build(self):
         self.run("autoreconf -if")
