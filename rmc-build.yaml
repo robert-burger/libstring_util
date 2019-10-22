@@ -2,9 +2,9 @@ context: conan
 configurations:
 - any:
     build_type: Release
-    shared: [True, False]
+    shared: {True, False}
 - osl42-x86_64:
-    build_type: [Debug, Release]
+    build_type: {Debug, Release}
 - osl15-x86_64:
 - sled11-x86-gcc4.8:
 - sled11-x86_64-gcc4.8:
