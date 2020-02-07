@@ -288,6 +288,9 @@ public:
 	~string_formatter();
 
 	std::string operator()(const char* format, ...);
+#if __cplusplus >= 201103L
+	std::string vformat(const char* format, va_list vlist);
+#endif
 };
 
 std::list<std::string> split_command_line(std::string cmdline);

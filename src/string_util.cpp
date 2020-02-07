@@ -18,9 +18,11 @@
 */
 
 #include <stdio.h>
-#include <sstream>
 #include <stdarg.h>
 #include <ctype.h>
+
+#include <cstdio>
+#include <sstream>
 
 #include <string_util/string_util.h>
 
@@ -539,6 +541,9 @@ string_formatter::string_formatter() {
 string_formatter::~string_formatter() {
 	free(buffer);
 }
+
+#if __cplusplus < 201103L
+// before C++11
 string string_formatter::operator()(const char* format, ...) {
 	int n;
 	char*& p = buffer;
@@ -575,6 +580,46 @@ string string_formatter::operator()(const char* format, ...) {
 	// va_end(ap);
 	return string(p);
 }
+#else
+// since C++11
+string string_formatter::operator()(const char* format, ...) {
+	va_list ap;
+	va_start(ap, format);
+	std::string s = vformat(format, ap);
+	va_end(ap);
+	return s;
+}
+
+string string_formatter::vformat(const char* format, va_list vlist) {
+	va_list ap;
+	va_list ap2;
+	va_copy(ap, vlist);
+	va_copy(ap2, ap);
+	
+	unsigned int needed = std::vsnprintf(nullptr, 0, format, ap) + 1; // c++11
+	va_end(ap);
+	
+	int n;
+	char*& p = buffer;
+	char* np;
+
+	if(!p) {
+		size = needed;
+		if ((p = (char*)malloc(size)) == NULL)
+			throw std::bad_alloc();
+	} else if(size < needed) {
+		if ((np = (char*)realloc(p, needed)) == NULL)
+			throw std::bad_alloc();
+		p = np;
+		size = needed;
+	}
+	
+	std::vsnprintf(p, size, format, ap2);
+	va_end(ap2);
+	return string(p);
+}
+#endif
+
 
 list<string> split_command_line(string cmd) {
 	list<string> l;
