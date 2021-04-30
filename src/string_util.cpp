@@ -538,6 +538,12 @@ string_formatter::string_formatter() {
 	buffer = NULL;
 	size = 0;
 }
+string_formatter::string_formatter(unsigned int preallocate) {
+	size = preallocate;
+	buffer = (char*)malloc(size);
+	if(!buffer)
+		throw std::bad_alloc();
+}
 string_formatter::~string_formatter() {
 	free(buffer);
 }

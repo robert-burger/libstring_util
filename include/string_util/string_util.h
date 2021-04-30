@@ -285,6 +285,7 @@ class string_formatter {
 	unsigned int size;
 public:
 	string_formatter();
+	string_formatter(unsigned int preallocate);
 	~string_formatter();
 
 	std::string operator()(const char* format, ...);
