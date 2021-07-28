@@ -89,6 +89,12 @@ public:
 
 	virtual py_value* copy() { return new py_string(value); }
 };
+class py_bytes : public py_string {
+public:
+	py_bytes(std::string v) : py_string(v) {}
+	py_bytes(char* v, int len) : py_string(v, len) {}
+	virtual std::string repr() { return std::string("b") + py_string::repr(); }
+};
 
 class py_int : public py_value {
 public:
