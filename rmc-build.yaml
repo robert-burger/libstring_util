@@ -7,6 +7,3 @@ configurations:
 - osl15-x86_64:
 - winxp-x86-mingw32:
 - winxp-x86_64-mingw32:
-- vxworks7.0.0-x86_64-gcc4.8:
-
-
