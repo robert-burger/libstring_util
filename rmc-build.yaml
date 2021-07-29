@@ -4,16 +4,9 @@ configurations:
     build_type: Release
     shared: {True, False}
 - osl42-x86_64:
-    build_type: {Debug, Release}
 - osl15-x86_64:
 - winxp-x86-mingw32:
 - winxp-x86_64-mingw32:
-- ubuntu12.04-armhf-gcc4.7:
-- ubuntu14.04-armhf-gcc4.9:
-- vxworks6.9.3-armv7-gcc4.3:
 - vxworks7.0.0-x86_64-gcc4.8:
-- qnx6.3-x86-gcc3.3:
-- qnx6.5-x86-gcc4.4:
-- qnx6.5-x86-gcc4.4-gpp:
 
 
