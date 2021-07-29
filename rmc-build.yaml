@@ -23,6 +23,4 @@ configurations:
 - qnx6.5-x86-gcc4.4:
 - qnx6.5-x86-gcc4.4-gpp:
 - qnx6.4-powerpc-gcc4.3:
-- android17-armhf-gcc4.9:
-- android17-x86-gcc4.9:
-- android21-aarch64-gcc4.9:
+
