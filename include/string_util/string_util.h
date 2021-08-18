@@ -120,6 +120,7 @@ public:
 	virtual py_value* copy() { return new py_int(value); }
 };
 
+extern bool show_py2_L_literal;
 typedef int64_t py_long_value_t;
 class py_long : public py_value {
 public:
@@ -131,7 +132,9 @@ public:
 
 	virtual operator std::string() const {
 		std::stringstream ss;
-		ss << value << "L";
+		ss << value;
+		if(show_py2_L_literal)
+			ss << "L";
 		return ss.str();
 	}
 	virtual std::string repr() { return std::string(*this); };

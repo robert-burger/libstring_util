@@ -32,6 +32,8 @@ namespace string_util {
 
 using namespace std;
 
+bool show_py2_L_literal = false;
+
 string binary_data_repr(const char* input, int input_len) {
 	stringstream ss;
 	ss << "data ";
