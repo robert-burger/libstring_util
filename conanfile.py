@@ -29,6 +29,7 @@ class StringUtilConan(ConanFile):
 
         autotools.configure(configure_dir=".", vars={'CFLAGS': ''}, args=args)
         autotools.make()
+        autotools.make(target="check")
 
     def package(self):
         autotools = AutoToolsBuildEnvironment(self)
