@@ -1,3 +1,4 @@
+import os
 from conans import ConanFile, AutoToolsBuildEnvironment, tools
 
 
@@ -29,8 +30,15 @@ class StringUtilConan(ConanFile):
 
         autotools.configure(configure_dir=".", vars={'CFLAGS': ''}, args=args)
         autotools.make()
-        autotools.make(target="check", args=["VERBOSE=1"])
-
+        if os.getenv("BUILD_MODE") == "cross" or os.getenv("CHOST"):
+            # we are cross compiling,
+            # just test whether test-program compiles
+            not_working = ("x86_64-w64-mingw32", "i686-w64-mingw32") # those are hosts where somehow autotools fails to provide include path as requested in Makefile.am
+            if os.getenv("CHOST") not in not_working:
+                autotools.make(target="example", args=["-C", "test/example", "V=1"])
+        else:
+            autotools.make(target="check", args=["VERBOSE=1"])
+        
     def package(self):
         autotools = AutoToolsBuildEnvironment(self)
         autotools.install()

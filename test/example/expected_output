@@ -4,4 +4,3 @@ float: 123.456000
 string: 'string'
 python repr: [123, 123.456, 'string', 'echo \'done, you can now poweroff...\'', 4242]
 python repr of py_long with L-literal: 4242L
-PASS example (exit status: 0)
