@@ -1,4 +1,5 @@
 #!/bin/sh
 
 # exec cmp $srcdir/expected_output example.log
-exec diff -Nur $srcdir/expected_output example.log
+grep -v "PASS example.*" example.log > example.log.noresultline
+exec diff -Nur $srcdir/expected_output example.log.noresultline

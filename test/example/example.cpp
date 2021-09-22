@@ -15,8 +15,8 @@ using namespace string_util;
  */
 
 int main(int argc, char* argv[]) {	
-	py_value* v = eval_full("[123, 123.456, 'string']");
-	
+	py_value* v = eval_full("[123, 123.456, 'string']"); // v is now the owner!
+
 	py_list* l = dynamic_cast<py_list*>(v); assert(l);	
 	printf("N list items: %d\n", l->value.size());
 
@@ -35,7 +35,14 @@ int main(int argc, char* argv[]) {
 			printf("other object: %s\n", repr(*i).c_str());
 	}
 
-	printf("python repr: %s\n", repr(v).c_str());
-	
+	l->value.push_back(new py_string("echo 'done, you can now poweroff...'"));
+	l->value.push_back(new py_long(4242)); // takes ownership of new py_long
+ 	printf("python repr: %s\n", repr(v).c_str());
+
+	show_py2_L_literal = true;
+	printf("python repr of py_long with L-literal: %s\n", repr(l->value.back()).c_str());
+
+
+	delete v;
 	return 0;
 }
