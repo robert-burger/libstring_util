@@ -27,8 +27,8 @@ class StringUtilConan(ConanFile):
         else:
             args = ["--disable-shared", "--enable-static"]
 
-        autotools.configure(configure_dir=".", vars={'CFLAGS': ''}, args=args)
-        autotools.make()
+        autotools.configure(configure_dir=".", args=args)
+        autotools.make(args=["V=1"])
 
     def package(self):
         autotools = AutoToolsBuildEnvironment(self)
