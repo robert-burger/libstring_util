@@ -1,0 +1,17 @@
+PTVERSION = 2
+NAME = libstring_util
+VERSION = 1.1.8
+DESCRIPTION = C++ lib of useful string manipulation functions
+MAINTAINER = Florian Schmidt <florian.schmidt@dlr.de>
+DOCUMENTATION = https://rmc-github.robotic.dlr.de/schm-fl/libstring_util/wiki
+
+SUPPORTED_LANGUAGES = C++
+C++_INCLUDE_PATHS = ${PKGROOT}/include/
+C++_LIB_PATHS = ${PKGROOT}/lib/${ARCH}
+C++_LIBS = string_util
+
+ARCHS = osl42-x86_64, osl15-x86_64, osl153-x86_64, winxp-x86-mingw32, winxp-x86_64-mingw32, sled11-x86-gcc4.x, sled11-x86_64-gcc4.x, ubuntu12.04-armhf-gcc4.x, ubuntu14.04-armhf-gcc4.x, vxworks6.7-x86-gcc4.x, vxworks6.8-x86-gcc4.x, vxworks6.9-x86-gcc4.x, vxworks6.9.3-x86-gcc4.x, vxworks6.9.3-armv7-gcc4.x, vxworks6.9.4-x86-gcc4.x, vxworks7.0.0-x86_64, qnx6.3-x86-gcc3.3, qnx6.5-x86-gcc4.x, qnx6.5-x86-gcc4.x-gpp, qnx6.4-powerpc-gcc4.x, android17-armhf-gcc4.9, android17-x86-gcc4.9, android21-aarch64-gcc4.9
+
+[install]
+include/ => include/
+build/${ARCH}/install/lib/ => lib/${ARCH}/

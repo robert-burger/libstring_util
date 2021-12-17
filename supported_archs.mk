@@ -1,6 +1,7 @@
 SUPPORTED_ARCHS := \
   osl42-x86_64 \
   osl15-x86_64 \
+  osl153-x86_64 \
   winxp-x86-mingw32 \
   winxp-x86_64-mingw32 \
   sled11-x86-gcc4.x \
