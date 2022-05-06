@@ -18,11 +18,6 @@ class StringUtilConan(ConanFile):
         autotools = AutoToolsBuildEnvironment(self)
         autotools.fpic = self.options.fPIC
 
-        if self.settings.build_type == "Debug":
-            autotools.flags = ["-O0", "-g"]
-        else:
-            autotools.flags = ["-O3"]
-
         if self.options.shared:
             args = ["--enable-shared", "--disable-static"]
         else:
