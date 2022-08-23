@@ -20,7 +20,9 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <ctype.h>
+#if __cplusplus >= 201103L
 #include <inttypes.h>
+#endif
 
 #include <cstdio>
 #include <sstream>
