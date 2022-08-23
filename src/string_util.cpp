@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <ctype.h>
+#include <inttypes.h>
 
 #include <cstdio>
 #include <sstream>
@@ -130,10 +131,10 @@ string repr(int32_t input) {
 	return format_string("%d", input);
 }
 string repr(uint64_t input) {
-	return format_string("%lluL", input);
+	return format_string("%" PRIu64, input);
 }
 string repr(int64_t input) {
-	return format_string("%lldL", input);
+	return format_string("%"  PRId64, input);
 }
 string repr(bool input) {
 	if(input)
