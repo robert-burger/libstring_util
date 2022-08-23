@@ -131,10 +131,18 @@ string repr(int32_t input) {
 	return format_string("%d", input);
 }
 string repr(uint64_t input) {
+#if __cplusplus >= 201103L
 	return format_string("%" PRIu64, input);
+#else
+	return format_string("%llu", input);
+#endif
 }
 string repr(int64_t input) {
+#if __cplusplus >= 201103L
 	return format_string("%"  PRId64, input);
+#else
+	return format_string("%lld", input);
+#endif
 }
 string repr(bool input) {
 	if(input)
