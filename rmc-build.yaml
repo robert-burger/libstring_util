@@ -3,8 +3,8 @@ configurations:
 - any:
     build_type: Release
     shared: {True, False}
-- osl42-x86_64:
-- osl15-x86_64:
+- imports:
+  - linux_defaults
 # those started failing to build shared objects on jenkins.
 # libtool there complains now with "can't build x86_64-w64-mingw32 shared library unless -no-undefined is specified"
 #- winxp-x86-mingw32:
