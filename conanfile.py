@@ -38,6 +38,7 @@ class StringUtilConan(ConanFile):
     def package(self):
         autotools = AutoToolsBuildEnvironment(self)
         autotools.install()
+        tools.remove_files_by_mask(self.package_folder, "*.la")
 
     def package_info(self):
         self.cpp_info.includedirs = ['include']
