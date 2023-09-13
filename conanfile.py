@@ -14,7 +14,7 @@ class StringUtilConan(ConanFile):
     exports_sources = ["*", "!.gitignore"] + ["!%s" % x for x in tools.Git().excluded_files()]
 
     def build(self):
-        tools.replace_in_file("project.properties", "VERSION=1.1.7", f"VERSION={self.version.replace('.', ':')}")
+        tools.replace_in_file("project.properties", "VERSION=1.1.7", f"VERSION={self.version.replace('.', ':').replace('-', '')}")
         self.run("autoreconf -if")
         autotools = AutoToolsBuildEnvironment(self)
         autotools.fpic = self.options.fPIC
