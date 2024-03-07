@@ -1,6 +1,7 @@
 import os
 
 from conan import ConanFile
+from conan.tools.build import can_run
 from conan.tools.files import replace_in_file, rm
 from conan.tools.gnu import Autotools
 
@@ -33,7 +34,7 @@ class StringUtilConan(ConanFile):
         autotools.configure(args=args)
         autotools.make(args=["V=1"])
 
-        if os.getenv("BUILD_MODE") == "cross" or os.getenv("CHOST"):
+        if not can_run(self):
             # we are cross compiling,
             # just test whether test-program compiles
             not_working = (
