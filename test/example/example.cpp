@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
 	py_value* v = eval_full("[123, 123.456, 'string']"); // v is now the owner!
 
 	py_list* l = dynamic_cast<py_list*>(v); assert(l);	
-	printf("N list items: %d\n", l->value.size());
+	printf("N list items: %ld\n", l->value.size());
 
 	for(py_list_value_t::iterator i = l->value.begin(); i != l->value.end(); i++) {
 		py_int* iv = dynamic_cast<py_int*>(*i);
