@@ -693,6 +693,16 @@ string join_command_line(list<string>& args) {
 	return ss.str();
 }
 
+std::string join_command_line(const std::vector<std::string>& args) {
+	std:: stringstream ss;
+	for(auto i = args.begin(); i != args.end(); i++) {
+		if(i != args.begin())
+			ss << " ";
+		ss << "\"" << *i << "\"";
+	}
+	return ss.str();
+}
+
 vector<string> split_string(string input, string by, unsigned int max_split) {
 	vector<string> out;
 
@@ -813,6 +823,67 @@ bool pattern_matches(string pattern, string test) {
 	}
 	// printf("both pos at end! match!\n");
 	return true;
+}
+
+std::vector<std::string> get_cmdline_arguments(const std::string& cmd, bool do_throw)
+{
+	std::vector<std::string> ret;
+
+	unsigned int offset = 0;
+	while(offset < cmd.size()) {
+		unsigned int last_pos;
+		auto arg = get_cmdline_argument_from(cmd.substr(offset), do_throw, &last_pos);
+		// printf("got arg '%s', rest: '%s'\n", arg.c_str(), cmd.substr(offset + last_pos).c_str());
+		ret.push_back(arg);
+		offset += last_pos + 1;
+	}
+
+	return ret;
+}
+
+std::string get_cmdline_argument_from(const std::string& cmd, bool do_throw, unsigned int* last_pos)
+{
+	std::string argument;
+	bool in_single_quotes = false, in_double_quotes = false, escape = false;
+
+	// printf("get arg from: '%s'\n", cmd.c_str());
+	size_t i = 0;
+	for (; i < cmd.size(); ++i) {
+		auto c = cmd[i];
+
+		if (escape) {
+			// Handle escaped characters
+			argument.push_back(c);
+			escape = false;
+		} else if (c == '\\') {
+			// Start escape sequence
+			escape = true;
+		} else if (c == '\'' && !in_double_quotes) {
+			// Toggle single-quote mode
+			in_single_quotes = !in_single_quotes;
+			if (!in_single_quotes) // closing quotes
+				break; // argument done!
+		} else if (c == '\"' && !in_single_quotes) {
+			// Toggle double-quote mode
+			in_double_quotes = !in_double_quotes;
+			if (!in_double_quotes) // closing quotes
+				break; // argument done!
+		} else if (std::isspace(c) && !in_single_quotes && !in_double_quotes) {
+			// Break on unquoted whitespace
+			if (!argument.empty())
+				break;
+		} else if (!std::isspace(c) || !argument.empty())
+			argument.push_back(c);
+	}
+
+	if (last_pos)
+		*last_pos = i;
+
+	// If unbalanced quotes remain, throw an error
+	if (do_throw && (in_single_quotes || in_double_quotes || escape))
+		throw std::invalid_argument("unbalanced quotes or incomplete escape sequence in command line!");
+
+	return argument;
 }
 
 }

@@ -305,12 +305,17 @@ public:
 
 std::list<std::string> split_command_line(std::string cmdline);
 std::string join_command_line(std::list<std::string>& args);
+std::string join_command_line(const std::vector<std::string>& args);
 
 std::vector<std::string> split_string(std::string input, std::string by, unsigned int max_split=0);
 std::string join_string(std::vector<std::string> input, std::string by);
 std::string join_string(std::vector<std::string> input, std::string by, unsigned int from, unsigned int to_without);
 
 bool pattern_matches(std::string pattern, std::string test);
+
+std::vector<std::string> get_cmdline_arguments(const std::string& cmd, bool do_throw=true);
+std::string get_cmdline_argument_from(const std::string& cmd, bool do_throw, unsigned int* last_pos=NULL);
+
 
 }
 #endif // STRING_UTIL_H
