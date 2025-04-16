@@ -55,6 +55,9 @@ std::string repr(uint64_t input);
 std::string repr(int64_t input);
 std::string repr(bool input);
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+
 class py_value {
 public:
 	virtual ~py_value() { };
@@ -274,6 +277,8 @@ public:
 		return pyd;
 	}
 };
+
+#pragma GCC diagnostic pop
 
 std::string eval(std::string value);
 std::string::size_type eval_string_until(std::string value, std::string::size_type start, std::string& output);
