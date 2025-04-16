@@ -20,7 +20,7 @@ class StringUtilConan(ConanFile):
 
     def build(self):
         replace_in_file(
-            self, "project.properties", "VERSION=1.1.7", f"VERSION={self.version.replace('.', ':').replace('-', '')}"
+            self, "project.properties", "VERSION=1:1:7", f"VERSION={self.version.replace('.', ':').replace('-', '')}"
         )
         self.run("autoreconf -if")
         autotools = Autotools(self)
